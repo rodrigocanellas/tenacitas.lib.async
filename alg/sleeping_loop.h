@@ -16,7 +16,6 @@
 
 #include <tenacitas.lib.log/alg/logger.h>
 #include <tenacitas.lib.number/typ/id.h>
-//#include <tenacitas.lib.traits/alg/traits.h>
 
 using namespace std::chrono_literals;
 

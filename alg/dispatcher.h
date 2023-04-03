@@ -33,7 +33,6 @@
 #include <tenacitas.lib.async/typ/subscriber.h>
 #include <tenacitas.lib.log/alg/logger.h>
 #include <tenacitas.lib.number/typ/id.h>
-//#include <tenacitas.lib.traits/alg/traits.h>
 
 using namespace std::chrono_literals;
 
@@ -75,8 +74,8 @@ sensor.
 Every \p event class must define a <tt>operator <<(std::ostream&)</tt>, and a
 <tt>static constexpr typ::event_id id</tt> public attribute.
 
-A \p tenacitas::lib::async::typ::subscriber_t is a function class that will handle a
-(shared) pointer to a \p t_event object.
+A \p tenacitas::lib::async::typ::subscriber_t is a function class that will
+handle a (shared) pointer to a \p t_event object.
 
 A \p queue is where \p event objects will be queued for subsciber object to
 access them. For example, a user menu choice can generate a log message, a

@@ -1,4 +1,9 @@
 
+/// \copyright This file is under GPL 3 license. Please read the \p LICENSE file
+/// at the root of \p tenacitas directory
+
+/// \author Rodrigo Canellas - rodrigo.canellas at gmail.com
+
 #include <tenacitas.lib.async/alg/execute.h>
 #include <tenacitas.lib.log/alg/logger.h>
 #include <tenacitas.lib.test/alg/tester.h>
@@ -46,7 +51,9 @@ struct executer_002 {
     return "Function with no parameter, no returning, with no timeout";
   }
   bool operator()(const program::alg::options &) {
-    auto _function = [](std::function<bool()>) -> void { TNCT_LOG_DEB("hello"); };
+    auto _function = [](std::function<bool()>) -> void {
+      TNCT_LOG_DEB("hello");
+    };
 
     return async::alg::execute(200ms, _function);
   }
@@ -106,7 +113,8 @@ struct executer_005 {
 
     std::string _str{"hello"};
 
-    return !async::alg::execute(200ms, _function, 4, std::move(_str), "goodbye");
+    return !async::alg::execute(200ms, _function, 4, std::move(_str),
+                                "goodbye");
   }
 };
 
@@ -212,7 +220,8 @@ struct executer_009 {
 
     std::optional<int16_t> _maybe = async::alg::execute(200ms, _function);
     if (_maybe) {
-      TNCT_LOG_ERR("function not timedout, as expected, and returned ", *_maybe);
+      TNCT_LOG_ERR("function not timedout, as expected, and returned ",
+                   *_maybe);
       return false;
     }
     return true;
@@ -228,14 +237,16 @@ struct executer_010 {
     auto _function = [](std::function<bool()>, int16_t p_i,
                         float p_f) -> float { return p_f * p_i; };
 
-    std::optional<float> _maybe = async::alg::execute(200ms, _function, 4, -2.5);
+    std::optional<float> _maybe =
+        async::alg::execute(200ms, _function, 4, -2.5);
     if (!_maybe) {
       TNCT_LOG_ERR("function timeout, when it should not");
       return false;
     }
     float _value = *_maybe;
     if (_value != static_cast<float>(-10)) {
-      TNCT_LOG_ERR("value should be ", static_cast<float>(-10), ", but it is ", _value);
+      TNCT_LOG_ERR("value should be ", static_cast<float>(-10), ", but it is ",
+                   _value);
     }
     return true;
   }
@@ -257,9 +268,11 @@ struct executer_011 {
       return p_f * p_i;
     };
 
-    std::optional<float> _maybe = async::alg::execute(200ms, _function, 4, -2.5);
+    std::optional<float> _maybe =
+        async::alg::execute(200ms, _function, 4, -2.5);
     if (_maybe) {
-      TNCT_LOG_ERR("function should timeout, but it has not, and returned ", *_maybe);
+      TNCT_LOG_ERR("function should timeout, but it has not, and returned ",
+                   *_maybe);
       return false;
     }
     return true;

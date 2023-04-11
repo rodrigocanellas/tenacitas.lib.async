@@ -33,7 +33,8 @@ HEADERS = \
     $$BASE_DIR/tenacitas.lib.async/internal/alg/out_messenger.h \
     $$BASE_DIR/tenacitas.lib.async/internal/typ/queue.h \
     $$BASE_DIR/tenacitas.lib.async/internal/typ/connection.h \
-    $$BASE_DIR/tenacitas.lib.async/internal/typ/connections.h
+    $$BASE_DIR/tenacitas.lib.async/internal/typ/connections.h \
+    $$BASE_DIR/tenacitas.lib.async/cpt/concepts.h
 
 
 DISTFILES += \

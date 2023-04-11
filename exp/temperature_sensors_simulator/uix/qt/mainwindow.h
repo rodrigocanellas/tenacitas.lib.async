@@ -28,7 +28,7 @@ public:
 
 private:
   void on_new_temperature(evt::new_temperature &&);
-  int findRow(dat::sensor_id) const;
+  int findRow(typ::sensor_id) const;
 
 private slots:
   void on_btnAddSensor_clicked();

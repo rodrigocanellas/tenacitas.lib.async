@@ -3,8 +3,8 @@
 
 #include <thread>
 
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/sensor_id.h>
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/temperature.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/sensor_id.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/temperature.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/evt/new_temperature.h>
 #include <tenacitas.lib.async/alg/dispatcher.h>
 
@@ -23,8 +23,8 @@ struct sensor {
 
   template <typename t_time>
   sensor(async::alg::dispatcher::ptr p_dispatcher, t_time p_interval,
-         dat::sensor_id p_sensor_id, dat::temperature p_initial,
-         dat::temperature p_increment)
+         typ::sensor_id p_sensor_id, typ::temperature p_initial,
+         typ::temperature p_increment)
       : m_dispatcher(p_dispatcher), m_sensor_id(p_sensor_id),
         m_current(p_initial), m_increment(p_increment),
         m_sleeping_loop(
@@ -60,18 +60,18 @@ struct sensor {
     return m_sensor_id != p_sensor.m_sensor_id;
   }
 
-  void reset_temperature(dat::temperature p_temperature) {
+  void reset_temperature(typ::temperature p_temperature) {
     std::lock_guard<std::mutex> _lock(m_mutex);
     m_current = p_temperature;
   }
 
-  dat::sensor_id get_id() const { return m_sensor_id; }
+  typ::sensor_id get_id() const { return m_sensor_id; }
 
 private:
   async::alg::dispatcher::ptr m_dispatcher;
-  dat::sensor_id m_sensor_id;
-  dat::temperature m_current;
-  dat::temperature m_increment;
+  typ::sensor_id m_sensor_id;
+  typ::temperature m_current;
+  typ::temperature m_increment;
   async::alg::sleeping_loop m_sleeping_loop;
   std::mutex m_mutex;
 };

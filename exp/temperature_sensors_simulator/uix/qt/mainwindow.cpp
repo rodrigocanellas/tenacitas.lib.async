@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/sensor_id.h>
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/temperature.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/sensor_id.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/temperature.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/evt/add_sensor.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/evt/remove_sensor.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/evt/set_temperature.h>
@@ -24,7 +24,7 @@ MainWindow::MainWindow(async::alg::dispatcher::ptr p_dispatcher, QWidget *parent
 
 MainWindow::~MainWindow() { delete ui; }
 
-int MainWindow::findRow(dat::sensor_id p_sensor_id) const {
+int MainWindow::findRow(typ::sensor_id p_sensor_id) const {
   int _row_count = ui->tblTemperatures->rowCount();
   for (int _i = 0; _i < _row_count; ++_i) {
     QString _sensor_id_str = ui->tblTemperatures->item(_i, 0)->text();
@@ -49,8 +49,8 @@ void MainWindow::on_new_temperature(evt::new_temperature &&p_evt) {
 
 void MainWindow::on_btnAddSensor_clicked() {
   if (!ui->txtSensorToAdd->text().isEmpty()) {
-    dat::sensor_id _sensor_id{
-        static_cast<dat::sensor_id>(ui->txtSensorToAdd->text().toInt())};
+    typ::sensor_id _sensor_id{
+        static_cast<typ::sensor_id>(ui->txtSensorToAdd->text().toInt())};
     std::lock_guard<std::mutex> _lock{m_mutex};
     int _row = findRow(_sensor_id);
     if (_row == -1) {
@@ -66,8 +66,8 @@ void MainWindow::on_btnAddSensor_clicked() {
 
 void MainWindow::on_btnDeleteSensor_clicked() {
   if (!ui->txtSensorToDelete->text().isEmpty()) {
-    dat::sensor_id _sensor_id{
-        static_cast<dat::sensor_id>(ui->txtSensorToDelete->text().toInt())};
+    typ::sensor_id _sensor_id{
+        static_cast<typ::sensor_id>(ui->txtSensorToDelete->text().toInt())};
 
     std::lock_guard<std::mutex> _lock{m_mutex};
     int _row = findRow(_sensor_id);
@@ -84,10 +84,10 @@ void MainWindow::on_btnSetTemperature_clicked() {
     return;
   }
 
-  dat::sensor_id _sensor_id{
-      static_cast<dat::sensor_id>(ui->txtSensorToSet->text().toInt())};
+  typ::sensor_id _sensor_id{
+      static_cast<typ::sensor_id>(ui->txtSensorToSet->text().toInt())};
 
-  dat::temperature _temperature{ui->txtTemperatureToSet->text().toFloat()};
+  typ::temperature _temperature{ui->txtTemperatureToSet->text().toFloat()};
 
   std::lock_guard<std::mutex> _lock{m_mutex};
   if (findRow(_sensor_id) != -1) {

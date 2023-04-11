@@ -4,13 +4,13 @@
 #include <cstdint>
 #include <iostream>
 
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/sensor_id.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/sensor_id.h>
 
 namespace temperature_sensors_simulator::evt {
 
 struct add_sensor {
   add_sensor() = default;
-  explicit add_sensor(dat::sensor_id p_sensor_id) : sensor_id(p_sensor_id) {}
+  explicit add_sensor(typ::sensor_id p_sensor_id) : sensor_id(p_sensor_id) {}
 
   add_sensor(const add_sensor &) = default;
   add_sensor(add_sensor &&) = default;
@@ -23,7 +23,7 @@ struct add_sensor {
     return p_out;
   }
 
-  dat::sensor_id sensor_id;
+  typ::sensor_id sensor_id;
 
   static constexpr uint64_t id{1669763627244};
 };

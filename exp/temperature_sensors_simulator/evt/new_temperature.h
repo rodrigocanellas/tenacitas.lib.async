@@ -4,15 +4,15 @@
 #include <cstdint>
 #include <iostream>
 
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/sensor_id.h>
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/dat/temperature.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/sensor_id.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/temperature.h>
 
 namespace temperature_sensors_simulator::evt {
 
 struct new_temperature {
   new_temperature() = default;
-  explicit new_temperature(dat::sensor_id p_sensor_id,
-                           dat::temperature p_temperature)
+  explicit new_temperature(typ::sensor_id p_sensor_id,
+                           typ::temperature p_temperature)
       : sensor_id(p_sensor_id), temperature(p_temperature) {}
 
   new_temperature(const new_temperature &) = default;
@@ -27,8 +27,8 @@ struct new_temperature {
     return p_out;
   }
 
-  dat::sensor_id sensor_id;
-  dat::temperature temperature;
+  typ::sensor_id sensor_id;
+  typ::temperature temperature;
   static constexpr uint64_t id{1669763646194};
 };
 

@@ -48,8 +48,8 @@ private:
   void on_add_sensor(evt::add_sensor &&p_evt) {
     std::lock_guard<std::mutex> _lock(m_mutex);
     auto _sensor = std::make_unique<sensor>(
-        m_dispatcher, 500ms, p_evt.sensor_id, dat::temperature{25.5},
-        dat::temperature{0.75});
+        m_dispatcher, 500ms, p_evt.sensor_id, typ::temperature{25.5},
+        typ::temperature{0.75});
     _sensor->start();
     m_collection.insert(std::move(_sensor));
   }
@@ -69,7 +69,7 @@ private:
     }
   }
 
-  iterator find(dat::sensor_id p_sensor_id) {
+  iterator find(typ::sensor_id p_sensor_id) {
     return std::find_if(m_collection.begin(), m_collection.end(),
                         [&](const sensor_ptr &p_sensor) {
                           return p_sensor->get_id() == p_sensor_id;

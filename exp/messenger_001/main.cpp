@@ -17,6 +17,7 @@
 #include <tenacitas.lib.log/alg/logger.h>
 
 using namespace tenacitas;
+using namespace tenacitas::lib;
 using namespace std::chrono_literals;
 
 // async::alg::messenger::ptr g_messenger{async::alg::messenger::create()};
@@ -159,11 +160,11 @@ int main() {
   };
 
   TNCT_LOG_TST("publishing new io");
-  _messenger_1->publish<async::evt::new_channel>(async::typ::channel_id{1}, _receive,
-                                            _send, _deserialize);
+  _messenger_1->publish<async::evt::new_channel>(async::typ::channel_id{1},
+                                                 _receive, _send, _deserialize);
 
-  _messenger_2->publish<async::evt::new_channel>(async::typ::channel_id{1}, _receive,
-                                            _send, _deserialize);
+  _messenger_2->publish<async::evt::new_channel>(async::typ::channel_id{1},
+                                                 _receive, _send, _deserialize);
 
   TNCT_LOG_TST("subscribing for new_pressure in messenger 1");
   _messenger_1->subscribe<evt::new_pressure>(alg::handle_new_pressure);

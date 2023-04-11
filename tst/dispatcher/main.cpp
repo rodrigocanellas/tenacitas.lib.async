@@ -18,14 +18,14 @@
 #include <utility>
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
-#include <tenacitas.lib.log/alg/logger.h>
-#include <tenacitas.lib.program/alg/options.h>
-#include <tenacitas.lib.test/alg/tester.h>
 #include <tenacitas.lib.async/tst/dispatcher/bus.h>
 #include <tenacitas.lib.async/tst/dispatcher/cfg.h>
 #include <tenacitas.lib.async/tst/dispatcher/sto.h>
 #include <tenacitas.lib.async/tst/dispatcher/typ.h>
 #include <tenacitas.lib.async/tst/dispatcher/uix.h>
+#include <tenacitas.lib.log/alg/logger.h>
+#include <tenacitas.lib.program/alg/options.h>
+#include <tenacitas.lib.test/alg/tester.h>
 
 using namespace tenacitas::lib;
 using namespace std::chrono_literals;

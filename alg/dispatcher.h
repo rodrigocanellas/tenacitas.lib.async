@@ -26,6 +26,7 @@
 #include <utility>
 #include <vector>
 
+#include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/internal/typ/queue.h>
 #include <tenacitas.lib.async/typ/event_id.h>
 #include <tenacitas.lib.async/typ/priority.h>
@@ -133,7 +134,7 @@ struct dispatcher {
   /// \param p_priority is the priority of this queue
   ///
   /// \return a \p typ::queue_id, identifying the queue
-  template <typename t_event>
+  template <cpt::event t_event>
   typ::queue_id add_queue(typ::priority p_priority = typ::priority ::medium);
 
   /// \brief Adds a subscriber to a new queue
@@ -146,7 +147,7 @@ struct dispatcher {
   /// \param p_priority is the priority of this queue
   ///
   /// \return a \p typ::queue_id, identifying the queue
-  template <typename t_event>
+  template <cpt::event t_event>
   typ::queue_id subscribe(typ::subscriber_t<t_event> p_subscriber,
                           typ::priority p_priority = typ::priority ::medium);
 
@@ -158,7 +159,7 @@ struct dispatcher {
   /// \param p_queue_id is the identifier of the queue
   ///
   /// \param p_subscriber is the subscriber to be added
-  template <typename t_event>
+  template <cpt::event t_event>
   void subscribe(const typ::queue_id &p_queue_id,
                  typ::subscriber_t<t_event> p_subscriber);
 
@@ -172,9 +173,9 @@ struct dispatcher {
   /// \param p_num_workers defines the number of subscribers to be added
   ///
   /// \param p_factory is a function that creates subscribers
-  template <typename t_event>
+  template <cpt::event t_event>
   void subscribe(const typ::queue_id &p_queue_id, uint16_t p_num_workers,
-                 std::function<typ::subscriber_t<t_event>()> p_factory);
+                 std::function<async::typ::subscriber_t<t_event>()> p_factory);
 
   /// \brief Removes all queues of all events
   void clear();
@@ -187,7 +188,7 @@ struct dispatcher {
   /// \tparam t_event is the type of event that is published in the queue
   ///
   /// \param p_event is the event to be handled
-  template <typename t_event> bool publish(const t_event &p_event);
+  template <cpt::event t_event> bool publish(const t_event &p_event);
 
   /// \brief Publishs an event to be handled to a specific queue
   ///
@@ -197,7 +198,7 @@ struct dispatcher {
   /// published
   ///
   /// \param p_event is the event to be handled
-  template <typename t_event>
+  template <cpt::event t_event>
   bool publish_to_queue(typ::queue_id p_queue_id, const t_event &p_event);
 
   /// \brief Publishs an event to be handled
@@ -208,7 +209,7 @@ struct dispatcher {
   /// constructor
   ///
   /// \param p_params are the arguments to the \p t_event constructor
-  template <typename t_event, typename... t_params>
+  template <cpt::event t_event, typename... t_params>
   bool publish(t_params &&...p_params);
 
   /// \brief Sets the priority for a queue
@@ -218,7 +219,7 @@ struct dispatcher {
   /// \param p_id is the identifier of the queue
   ///
   /// \param p_priority is the priority to be set for the queue
-  template <typename t_event>
+  template <cpt::event t_event>
   void set_priority(const typ::queue_id &p_id, typ::priority p_priority);
 
   /// \brief Retrieves the priority for a queue, if found
@@ -228,7 +229,7 @@ struct dispatcher {
   /// \param p_id is the identifier of the queue
   ///
   /// \return the priority of the queue, if \p p_id exists
-  template <typename t_event>
+  template <cpt::event t_event>
   std::optional<typ::priority> get_priority(const typ::queue_id &p_id);
 
   /// \brief Retrieves the size of the queue of events for a queue
@@ -236,7 +237,7 @@ struct dispatcher {
   /// \param p_id is the identifier of the queue
   ///
   /// \return the size of the event queue or 0 if no queue was found
-  template <typename t_event> size_t size(const typ::queue_id &p_id);
+  template <cpt::event t_event> size_t size(const typ::queue_id &p_id);
 
   /// \brief Retrieves how many positions in the queue of events for a
   /// queue are occupied
@@ -244,7 +245,7 @@ struct dispatcher {
   /// \param p_id is the identifier of the queue
   ///
   /// \return the number of occupied positions or 0 if no queue was found
-  template <typename t_event> size_t occupied(const typ::queue_id &p_id);
+  template <cpt::event t_event> size_t occupied(const typ::queue_id &p_id);
 
   // \brief Waits for all the events in all the groups of  subscribers to be
   // handled
@@ -270,10 +271,10 @@ private:
   using events = std::map<typ::event_id, queues>;
 
 private:
-  template <typename t_event>
+  template <cpt::event t_event>
   internal::typ::queue_t<t_event> *convert(queues::iterator p_ite);
 
-  template <typename t_event> bool internal_publish(const t_event &p_event);
+  template <cpt::event t_event> bool internal_publish(const t_event &p_event);
 
   // Finds a queue based on a typ::queue_id
   queues::iterator find(queues &p_queues, const typ::queue_id &p_id);
@@ -285,7 +286,7 @@ private:
   // Sorts the list of queues in descending priority order
   void sort(queues &p_queues);
 
-  template <typename t_event> inline constexpr queues &get_queues();
+  template <cpt::event t_event> inline constexpr queues &get_queues();
 
 private:
   // Events id and the associated queues
@@ -308,7 +309,7 @@ private:
 //   }
 // }
 
-template <typename t_event>
+template <cpt::event t_event>
 typ::queue_id dispatcher::add_queue(typ::priority p_priority) {
 
   std::lock_guard<std::mutex> _lock(m_mutex);
@@ -328,7 +329,7 @@ typ::queue_id dispatcher::add_queue(typ::priority p_priority) {
   return _queue_id;
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 void dispatcher::subscribe(const typ::queue_id &p_queue_id,
                            typ::subscriber_t<t_event> p_subscriber) {
   queues &_queues = get_queues<t_event>();
@@ -349,10 +350,10 @@ void dispatcher::subscribe(const typ::queue_id &p_queue_id,
   }
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 void dispatcher::subscribe(
     const typ::queue_id &p_queue_id, uint16_t p_num_workers,
-    std::function<typ::subscriber_t<t_event>()> p_factory) {
+    std::function<async::typ::subscriber_t<t_event>()> p_factory) {
   queues &_queues = get_queues<t_event>();
 
   auto _queue_ite = find(_queues, p_queue_id);
@@ -377,7 +378,7 @@ inline dispatcher::~dispatcher() {
   stop();
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 typ::queue_id dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
                                     typ::priority p_priority) {
   typ::queue_id _id = add_queue<t_event>(p_priority);
@@ -385,7 +386,7 @@ typ::queue_id dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
   return _id;
 }
 
-template <typename t_event> bool dispatcher::publish(const t_event &p_event) {
+template <cpt::event t_event> bool dispatcher::publish(const t_event &p_event) {
   try {
 #ifdef TENACITAS_LOG
     TNCT_LOG_TRA("queue ", p_event);
@@ -397,7 +398,7 @@ template <typename t_event> bool dispatcher::publish(const t_event &p_event) {
   }
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 bool dispatcher::publish_to_queue(typ::queue_id p_queue_id,
                                   const t_event &p_event) {
   try {
@@ -427,7 +428,7 @@ bool dispatcher::publish_to_queue(typ::queue_id p_queue_id,
   return true;
 }
 
-template <typename t_event, typename... t_params>
+template <cpt::event t_event, typename... t_params>
 bool dispatcher::publish(t_params &&...p_params) {
   try {
 #ifdef TENACITAS_LOG
@@ -444,7 +445,7 @@ bool dispatcher::publish(t_params &&...p_params) {
   }
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 void dispatcher::set_priority(const typ::queue_id &p_id,
                               typ::priority p_priority) {
   queues &_queues = get_queues<t_event>();
@@ -454,7 +455,7 @@ void dispatcher::set_priority(const typ::queue_id &p_id,
   }
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 std::optional<typ::priority>
 dispatcher::get_priority(const typ::queue_id &p_id) {
   const queues &_queues = get_queues<t_event>();
@@ -465,7 +466,8 @@ dispatcher::get_priority(const typ::queue_id &p_id) {
   return {};
 }
 
-template <typename t_event> size_t dispatcher::size(const typ::queue_id &p_id) {
+template <cpt::event t_event>
+size_t dispatcher::size(const typ::queue_id &p_id) {
   const queues &_queues = get_queues<t_event>();
   auto _queues_ite = find(_queues, p_id);
   if (_queues_ite != _queues.end()) {
@@ -474,7 +476,7 @@ template <typename t_event> size_t dispatcher::size(const typ::queue_id &p_id) {
   return 0;
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 size_t dispatcher::occupied(const typ::queue_id &p_id) {
   const queues &_queues = get_queues<t_event>();
   auto _queues_ite = find(_queues, p_id);
@@ -485,7 +487,7 @@ size_t dispatcher::occupied(const typ::queue_id &p_id) {
   return 0;
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 internal::typ::queue_t<t_event> *dispatcher::convert(queues::iterator p_ite) {
   internal::typ::queue::ptr _queue_ptr{*p_ite};
 
@@ -496,7 +498,7 @@ internal::typ::queue_t<t_event> *dispatcher::convert(queues::iterator p_ite) {
   return _queue_event_raw_ptr;
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 bool dispatcher::internal_publish(const t_event &p_event) {
 #ifdef TENACITAS_LOG
   TNCT_LOG_TRA("internal queue ", p_event);
@@ -540,7 +542,7 @@ inline void dispatcher::sort(queues &p_queues) {
   });
 }
 
-template <typename t_event>
+template <cpt::event t_event>
 inline constexpr dispatcher::queues &dispatcher::get_queues() {
   return m_events[t_event::id];
 }

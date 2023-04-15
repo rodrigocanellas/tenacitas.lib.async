@@ -15,6 +15,7 @@
 #include <thread>
 
 #include <tenacitas.lib.async/cpt/concepts.h>
+#include <tenacitas.lib.concepts/cpt/chrono_convertible.h>
 #include <tenacitas.lib.log/alg/logger.h>
 #include <tenacitas.lib.number/typ/id.h>
 
@@ -37,7 +38,7 @@ struct sleeping_loop {
   /// \param p_function to be executed at a certain interval
   ///
   /// \param p_interval interval that \p p_function will be executed
-  template <cpt::convertible_to_ns t_interval>
+  template <concepts::cpt::convertible_to_ns t_interval>
   sleeping_loop(function p_function, t_interval p_interval);
 
   sleeping_loop() = delete;
@@ -96,7 +97,7 @@ private:
   number::typ::id m_id;
 };
 
-template <cpt::convertible_to_ns t_interval>
+template <concepts::cpt::convertible_to_ns t_interval>
 inline sleeping_loop::sleeping_loop(function p_function, t_interval p_interval)
     : m_function(p_function),
       m_interval(std::chrono::duration_cast<decltype(m_interval)>(p_interval)) {

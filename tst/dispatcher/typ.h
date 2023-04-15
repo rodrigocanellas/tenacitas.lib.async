@@ -15,6 +15,7 @@
 #include <vector>
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
+#include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.number/typ/id.h>
 
 using namespace tenacitas::lib;
@@ -96,8 +97,8 @@ struct publishings_definitions {
   publishings_definitions() = default;
 
   publishings_definitions(total p_total, amount p_amount_subscribers,
-                        amount_increment p_amount_subscribers_increment,
-                        time p_sleep, time_increment p_sleep_increment)
+                          amount_increment p_amount_subscribers_increment,
+                          time p_sleep, time_increment p_sleep_increment)
       : m_total(p_total), m_amount_subscribers(p_amount_subscribers),
         m_amount_subscribers_increment(p_amount_subscribers_increment),
         m_sleep(p_sleep), m_sleep_increment(p_sleep_increment) {}
@@ -108,8 +109,9 @@ struct publishings_definitions {
   publishings_definitions &operator=(publishings_definitions &&) = default;
   ~publishings_definitions() = default;
 
-  friend std::ostream &operator<<(std::ostream &p_out,
-                                  const publishings_definitions &p_publishings) {
+  friend std::ostream &
+  operator<<(std::ostream &p_out,
+             const publishings_definitions &p_publishings) {
     p_out << "total = " << p_publishings.m_total
           << ", amount subscribers = " << p_publishings.m_amount_subscribers
           << ", amount subscribers increment = "
@@ -157,7 +159,7 @@ struct publishing_results {
   subscribers_results subscribers;
 };
 
-using publishings_results = std::map<async::typ::queue_id, publishing_results>;
+using publishings_results = std::map<size_t, publishing_results>;
 
 } // namespace typ
 

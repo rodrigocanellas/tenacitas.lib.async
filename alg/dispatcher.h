@@ -135,21 +135,14 @@ struct dispatcher {
   ///
   /// \return a \p typ::queue_id, identifying the queue
   template <cpt::event t_event>
-  typ::queue_id add_queue(typ::priority p_priority = typ::priority ::medium);
+  typ::queue_id
+  add_queue(typ::priority p_priority = typ::priority ::medium);
 
   /// \brief Adds a subscriber to a new queue
-  ///
-  /// \tparam t_event is the type of event that will be handled by the \p
-  /// p_subscriber in the new queue
-  ///
-  /// \param p_subscriber is the subscriber to be added
-  ///
-  /// \param p_priority is the priority of this queue
-  ///
-  /// \return a \p typ::queue_id, identifying the queue
   template <cpt::event t_event>
-  typ::queue_id subscribe(typ::subscriber_t<t_event> p_subscriber,
-                          typ::priority p_priority = typ::priority ::medium);
+  typ::queue_id
+  subscribe(typ::subscriber_t<t_event> p_subscriber,
+            typ::priority p_priority = typ::priority ::medium);
 
   /// \brief Adds a subscriber to an existing queue
   ///
@@ -232,7 +225,7 @@ struct dispatcher {
   template <cpt::event t_event>
   std::optional<typ::priority> get_priority(const typ::queue_id &p_id);
 
-  /// \brief Retrieves the size of the queue of events for a queue
+  /// \brief Retrieves the size of the a queue of events
   ///
   /// \param p_id is the identifier of the queue
   ///
@@ -276,10 +269,8 @@ private:
 
   template <cpt::event t_event> bool internal_publish(const t_event &p_event);
 
-  // Finds a queue based on a typ::queue_id
   queues::iterator find(queues &p_queues, const typ::queue_id &p_id);
 
-  // Finds a queue based on a typ::queue_id
   queues::const_iterator find(const queues &p_queues,
                               const typ::queue_id &p_id) const;
 
@@ -379,8 +370,9 @@ inline dispatcher::~dispatcher() {
 }
 
 template <cpt::event t_event>
-typ::queue_id dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
-                                    typ::priority p_priority) {
+typ::queue_id
+dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
+                      typ::priority p_priority) {
   typ::queue_id _id = add_queue<t_event>(p_priority);
   subscribe(_id, p_subscriber);
   return _id;
@@ -468,6 +460,7 @@ dispatcher::get_priority(const typ::queue_id &p_id) {
 
 template <cpt::event t_event>
 size_t dispatcher::size(const typ::queue_id &p_id) {
+
   const queues &_queues = get_queues<t_event>();
   auto _queues_ite = find(_queues, p_id);
   if (_queues_ite != _queues.end()) {

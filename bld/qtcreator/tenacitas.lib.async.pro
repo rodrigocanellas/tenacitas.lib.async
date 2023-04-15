@@ -24,8 +24,8 @@ HEADERS = \
     $$BASE_DIR/tenacitas.lib.async/typ/connection_id.h \
     $$BASE_DIR/tenacitas.lib.async/typ/channel_id.h \
     $$BASE_DIR/tenacitas.lib.async/typ/event_id.h \
-    $$BASE_DIR/tenacitas.lib.async/typ/priority.h \
     $$BASE_DIR/tenacitas.lib.async/typ/queue_id.h \
+    $$BASE_DIR/tenacitas.lib.async/typ/priority.h \
     $$BASE_DIR/tenacitas.lib.async/typ/sender.h \
     $$BASE_DIR/tenacitas.lib.async/typ/event_ios.h \
     $$BASE_DIR/tenacitas.lib.async/internal/evt/connected.h \

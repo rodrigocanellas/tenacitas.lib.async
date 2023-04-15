@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
+#include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/internal/evt/connected.h>
 #include <tenacitas.lib.async/internal/typ/connection.h>
 #include <tenacitas.lib.async/internal/typ/connections.h>

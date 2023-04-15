@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
+#include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/evt/new_connection.h>
 #include <tenacitas.lib.async/evt/stop_messenger.h>
 #include <tenacitas.lib.async/internal/alg/in_messenger.h>
@@ -66,8 +67,9 @@ template <typename... t_codecs> struct messenger : public dispatcher {
 
   void stop();
 
-  template <typename t_event>
-  typ::queue_id add_queue(typ::priority p_priority = typ::priority ::medium);
+  template <cpt::event t_event>
+  typ::queue_id
+  add_queue(typ::priority p_priority = typ::priority ::medium);
 
   /// \brief Adds a subscriber to an existing publishing
   ///
@@ -77,19 +79,20 @@ template <typename... t_codecs> struct messenger : public dispatcher {
   /// \param p_queue_id is the identifier of the publishing
   ///
   /// \param p_subscriber is the subscriber to be added
-  template <typename t_event>
+  template <cpt::event t_event>
   void subscribe(const typ::queue_id &p_queue_id,
                  typ::subscriber_t<t_event> p_subscriber);
 
-  template <typename t_event>
-  typ::queue_id subscribe(typ::subscriber_t<t_event> p_subscriber,
-                          typ::priority p_priority = typ::priority ::medium);
+  template <cpt::event t_event>
+  typ::queue_id
+  subscribe(typ::subscriber_t<t_event> p_subscriber,
+            typ::priority p_priority = typ::priority ::medium);
 
-  template <typename t_event>
+  template <cpt::event t_event>
   void subscribe(const typ::queue_id &p_queue_id, uint16_t p_num_workers,
                  std::function<typ::subscriber_t<t_event>()> p_factory);
 
-  template <typename t_event> bool publish(const t_event &p_event);
+  template <cpt::event t_event> bool publish(const t_event &p_event);
 
   template <typename t_event, typename... t_params>
   bool publish(t_params &&...p_params);
@@ -148,14 +151,14 @@ template <typename... t_codecs> void messenger<t_codecs...>::stop() {
 }
 
 template <typename... t_codecs>
-template <typename t_event>
+template <cpt::event t_event>
 inline typ::queue_id
 messenger<t_codecs...>::add_queue(typ::priority p_priority) {
   return dispatcher::add_queue<t_event>(p_priority);
 }
 
 template <typename... t_codecs>
-template <typename t_event>
+template <cpt::event t_event>
 inline void
 messenger<t_codecs...>::subscribe(const typ::queue_id &p_queue_id,
                                   typ::subscriber_t<t_event> p_subscriber) {
@@ -163,7 +166,7 @@ messenger<t_codecs...>::subscribe(const typ::queue_id &p_queue_id,
 }
 
 template <typename... t_codecs>
-template <typename t_event>
+template <cpt::event t_event>
 typ::queue_id
 messenger<t_codecs...>::subscribe(typ::subscriber_t<t_event> p_subscriber,
                                   typ::priority p_priority) {
@@ -173,7 +176,7 @@ messenger<t_codecs...>::subscribe(typ::subscriber_t<t_event> p_subscriber,
 }
 
 template <typename... t_codecs>
-template <typename t_event>
+template <cpt::event t_event>
 inline void messenger<t_codecs...>::subscribe(
     const typ::queue_id &p_queue_id, uint16_t p_num_workers,
     std::function<typ::subscriber_t<t_event>()> p_factory) {
@@ -181,7 +184,7 @@ inline void messenger<t_codecs...>::subscribe(
 }
 
 template <typename... t_codecs>
-template <typename t_event>
+template <cpt::event t_event>
 inline bool messenger<t_codecs...>::publish(const t_event &p_event) {
   bool _res{dispatcher::publish<t_event>(p_event)};
 

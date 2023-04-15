@@ -8,10 +8,10 @@
 
 #include <memory>
 
+#include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/typ/channel_id.h>
 #include <tenacitas.lib.async/typ/connection_id.h>
 #include <tenacitas.lib.async/typ/message.h>
-#include <tenacitas.lib.async/typ/queue_id.h>
 #include <tenacitas.lib.async/typ/receiver.h>
 #include <tenacitas.lib.async/typ/sender.h>
 #include <tenacitas.lib.log/alg/logger.h>
@@ -73,7 +73,7 @@ struct connection {
   async::typ::connection_id connection_id;
   async::typ::sender send;
   async::typ::receiver receive;
-  async::typ::queue_id publishing_id;
+  uint16_t publishing_id;
 
 protected:
   connection(async::typ::channel_id p_channel_id,

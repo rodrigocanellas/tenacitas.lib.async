@@ -123,7 +123,7 @@ protected:
 
 protected:
   // Identifier of this publishing
-  async::typ::queue_id m_id;
+  size_t m_id;
 
   // Priority of this publishing
   async::typ::priority m_priority;
@@ -292,7 +292,7 @@ inline constexpr bool queue::operator==(const queue &p_publishing) const {
 }
 
 inline queue::queue(async::typ::priority p_priority)
-    : m_id(this), m_priority(p_priority) {}
+    : m_id(reinterpret_cast<size_t>(&(*this))), m_priority(p_priority) {}
 
 template <cpt::event t_event>
 inline queue_t<t_event>::queue_t(async::typ::priority p_priority)

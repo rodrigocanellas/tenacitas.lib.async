@@ -41,7 +41,7 @@ struct exit {
     return p_out;
   }
 
-  static constexpr uint64_t id{1670796516900};
+  static constexpr async::typ::event_id id{1670796516900};
 };
 
 struct dummy {
@@ -50,7 +50,7 @@ struct dummy {
     return p_out;
   }
 
-  static constexpr uint64_t id{1670796516901};
+  static constexpr async::typ::event_id id{1670796516901};
 };
 
 struct new_value {
@@ -67,7 +67,7 @@ struct new_value {
 
   typ::sensor_id sensor_id;
   typ::value value;
-  static constexpr uint64_t id{1670796516902};
+  static constexpr async::typ::event_id id{1670796516902};
 };
 } // namespace evt
 

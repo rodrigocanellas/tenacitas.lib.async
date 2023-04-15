@@ -12,6 +12,7 @@
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
 #include <tenacitas.lib.async/alg/sleeping_loop.h>
+#include <tenacitas.lib.async/typ/event_id.h>
 
 using namespace tenacitas::lib;
 using namespace std::chrono_literals;
@@ -27,7 +28,7 @@ struct temperature {
     return p_out;
   }
   float value{0.0};
-  static constexpr uint64_t id{1669763506001};
+  static constexpr async::typ::event_id id{1669763506001};
 };
 
 // event dispatched every time a temperature_subscriber handles a temperature
@@ -38,7 +39,7 @@ struct temperature_handled {
     p_out << "temperature_handled";
     return p_out;
   }
-  static constexpr uint64_t id{1669763518151};
+  static constexpr async::typ::event_id id{1669763518151};
 };
 
 // simulates a temperature sensor generating 'temperature' events

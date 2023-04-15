@@ -42,7 +42,7 @@ struct ev_0 {
 
   uint16_t value{0};
 
-  static constexpr uint64_t id{1669762943175};
+  static constexpr async::typ::event_id id{1669762943175};
 };
 
 struct ev_1 {
@@ -54,7 +54,7 @@ struct ev_1 {
     return p_out;
   }
 
-  static constexpr uint64_t id{1669763295778};
+  static constexpr async::typ::event_id id{1669763295778};
 
   char value{0};
 };

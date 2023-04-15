@@ -41,7 +41,7 @@
 //  typ::endpoint endpoint;
 //  bus::connection::ptr connection;
 
-//  static constexpr uint64_t id{1669763783652};
+//  static constexpr async::typ::event_id id{1669763783652};
 //};
 
 // template <typename t_message> struct interest_out {
@@ -51,7 +51,7 @@
 //     p_out << "interest_out";
 //     return p_out;
 //   }
-//   static constexpr uint64_t id{1669763796250};
+//   static constexpr async::typ::event_id id{1669763796250};
 //   typ::endpoint endpoint;
 // };
 
@@ -71,7 +71,7 @@
 //    return p_out;
 //  }
 
-//  static constexpr uint64_t id{1669763811055};
+//  static constexpr async::typ::event_id id{1669763811055};
 //  typ::endpoint endpoint;
 //  std::function<void(const typ ::endpoint &)> passive_connector;
 //};
@@ -98,7 +98,7 @@
 //  typ::endpoint endpoint;
 //  typ::status status;
 //  std::string description;
-//  static constexpr uint64_t id{1669763750111};
+//  static constexpr async::typ::event_id id{1669763750111};
 //};
 
 // struct stop_server {
@@ -106,7 +106,7 @@
 //     p_out << "stop_server";
 //     return p_out;
 //   }
-//   static constexpr uint64_t id{1669763826041};
+//   static constexpr async::typ::event_id id{1669763826041};
 // };
 
 // struct restart_server {
@@ -114,7 +114,7 @@
 //     p_out << "restart_server";
 //     return p_out;
 //   }
-//   static constexpr uint64_t id{1669763837898};
+//   static constexpr async::typ::event_id id{1669763837898};
 // };
 
 // template <typename t_connection> struct incoming {
@@ -128,7 +128,7 @@
 //   }
 //   std::byte m_read;
 //   std::shared_ptr<t_connection> m_connection;
-//   static constexpr uint64_t id{1669763849388};
+//   static constexpr async::typ::event_id id{1669763849388};
 // };
 
 // struct file_transfer {
@@ -142,7 +142,7 @@
 //    return p_out;
 //  }
 //  std::string file;
-//  static constexpr uint64_t id{1669763864840};
+//  static constexpr async::typ::event_id id{1669763864840};
 //};
 
 //} // namespace tenacitas::lib::ipc::evt

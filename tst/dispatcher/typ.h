@@ -16,6 +16,7 @@
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
 #include <tenacitas.lib.async/cpt/concepts.h>
+#include <tenacitas.lib.async/typ/event_id.h>
 #include <tenacitas.lib.number/typ/id.h>
 
 using namespace tenacitas::lib;

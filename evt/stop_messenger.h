@@ -17,7 +17,7 @@ struct stop_messenger {
     return p_out;
   }
 
-  static constexpr uint64_t id{1670716426016};
+  static constexpr async::typ::event_id id{1670716426016};
 };
 
 } // namespace tenacitas::lib::async::evt

@@ -27,7 +27,7 @@ struct temperature {
 
     return p_out;
   }
-  static constexpr uint64_t id{1669763544539};
+  static constexpr async::typ::event_id id{1669763544539};
   float value{0.0};
 };
 
@@ -39,7 +39,7 @@ struct temperature_handled {
     p_out << "temperature_handled";
     return p_out;
   }
-  static constexpr uint64_t id{1669763557032};
+  static constexpr async::typ::event_id id{1669763557032};
 };
 
 // simulates a temperature sensor generating values

@@ -25,7 +25,7 @@ struct add_sensor {
 
   typ::sensor_id sensor_id;
 
-  static constexpr uint64_t id{1669763627244};
+  static constexpr async::typ::event_id id{1669763627244};
 };
 
 } // namespace temperature_sensors_simulator::evt

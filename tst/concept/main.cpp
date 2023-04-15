@@ -22,7 +22,7 @@ struct a {
     p_out << p_a.i;
     return p_out;
   }
-  static constexpr uint16_t id{4};
+  static constexpr async::typ::event_id id{4};
 };
 
 struct b {
@@ -35,7 +35,7 @@ struct c {
     p_out << p_c.i;
     return p_out;
   }
-  static constexpr int16_t id{4};
+  static constexpr async::typ::event_id id{4};
 };
 
 struct d {
@@ -44,7 +44,7 @@ struct d {
     p_out << p_d.i;
     return p_out;
   }
-  static constexpr size_t id{4};
+  static constexpr async::typ::event_id id{4};
 };
 
 struct test000 {

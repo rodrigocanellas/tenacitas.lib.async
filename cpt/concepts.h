@@ -13,16 +13,14 @@
 #include <iostream>
 
 #include <tenacitas.lib.async/typ/event_id.h>
-#include <tenacitas.lib.concepts/cpt/chrono_convertible.h>
-#include <tenacitas.lib.concepts/cpt/id.h>
 #include <tenacitas.lib.concepts/cpt/printable.h>
 
 namespace tenacitas::lib::async::cpt {
 
 template <typename t>
 concept event = requires(t p_t) {
-  { t::id } -> tenacitas::lib::concepts::cpt::id;
-  requires tenacitas::lib::concepts::cpt::printable<t>;
+  { t::id } -> std::same_as<const typ::event_id &>;
+  requires concepts::cpt::printable<t>;
 };
 
 template <typename t>

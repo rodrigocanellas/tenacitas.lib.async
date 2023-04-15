@@ -8,6 +8,7 @@
 
 /// \example executer_000/main.cpp
 
+#include <concepts>
 #include <condition_variable>
 #include <functional>
 #include <mutex>
@@ -15,6 +16,7 @@
 #include <thread>
 #include <type_traits>
 
+#include <tenacitas.lib.concepts/cpt/chrono_convertible.h>
 #include <tenacitas.lib.log/alg/logger.h>
 
 /// \brief master namespace
@@ -22,9 +24,6 @@ namespace tenacitas::lib::async::alg {
 
 /// \brief Executes a function synchronoulsy with timeout control
 /// The function may or may not return, and may or may not receive parameters
-///
-/// \tparam t_time type of the time used for timeout control, it must be one of
-/// 'std::chrono' types
 ///
 /// \tparam t_function the function to be executed. It may not return, as
 ///
@@ -50,8 +49,8 @@ namespace tenacitas::lib::async::alg {
 /// \param p_params are the possible arguments for \p p_function
 ///
 /// \attention Please, take a look at
-/// <tt>tenacitas/lib/exp/lib/async/executer_000</tt> for examples
-template <typename t_time, typename t_function, typename... t_params>
+/// <tt>tenacitas.lib.async/exp/executer_000/main.cpp</tt> for examples
+template <typename t_function, typename... t_params>
 inline std::conditional_t<
     // if 't_function' return type is 'void'
     std::is_void_v<
@@ -64,7 +63,8 @@ inline std::conditional_t<
     // 'p_function' executes in less 'p_max_time', or empty otherwise
     std::optional<
         std::invoke_result_t<t_function, std::function<bool()>, t_params...>>>
-execute(t_time p_max_time, t_function &p_function, t_params &&... p_params) {
+execute(concepts::cpt::convertible_to_ns auto p_max_time,
+        t_function &p_function, t_params &&...p_params) {
   std::mutex _mutex;
   std::condition_variable _cond;
   bool _timeout{false};
@@ -74,6 +74,8 @@ execute(t_time p_max_time, t_function &p_function, t_params &&... p_params) {
   using t_ret = typename std::invoke_result_t<t_function, std::function<bool()>,
                                               t_params...>;
 
+  auto _ns{std::chrono::duration_cast<std::chrono::nanoseconds>(p_max_time)};
+
   if constexpr (std::is_void_v<t_ret>) {
     std::thread _th([&]() -> void {
       p_function(_is_timeout, std::forward<t_params>(p_params)...);
@@ -81,7 +83,7 @@ execute(t_time p_max_time, t_function &p_function, t_params &&... p_params) {
     });
 
     std::unique_lock<std::mutex> _lock{_mutex};
-    if (_cond.wait_for(_lock, p_max_time) != std::cv_status::timeout) {
+    if (_cond.wait_for(_lock, _ns) != std::cv_status::timeout) {
       _th.join();
       return true;
     }
@@ -98,7 +100,7 @@ execute(t_time p_max_time, t_function &p_function, t_params &&... p_params) {
     });
 
     std::unique_lock<std::mutex> _lock{_mutex};
-    if (_cond.wait_for(_lock, p_max_time) != std::cv_status::timeout) {
+    if (_cond.wait_for(_lock, _ns) != std::cv_status::timeout) {
       _th.join();
       return {std::move(_ret)};
     }

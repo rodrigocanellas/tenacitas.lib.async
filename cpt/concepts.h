@@ -20,8 +20,23 @@ namespace tenacitas::lib::async::cpt {
 template <typename t>
 concept event = requires(t p_t) {
   { t::id } -> std::same_as<const typ::event_id &>;
-  requires concepts::cpt::printable<t>;
+  concepts::cpt::printable<t>;
+  std::default_initializable<t>;
 };
+
+// template <typename t>
+// concept message_iterator = requires {
+//   std::forward_iterator<t>;
+
+//};
+
+// template <typename t>
+// concept message = requires {
+//   std::copyable<t>;
+//   std::movable<t>;
+//   typename t::const_iterator;
+
+//};
 
 template <typename t>
 concept dispatcher = requires(t p_t) {

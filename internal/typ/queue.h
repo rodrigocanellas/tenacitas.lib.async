@@ -162,9 +162,8 @@ public:
   void add_subscriber(async::typ::subscriber_t<t_event> p_subscriber);
 
   // Adds a bunch of subscribers
-  template <typename t_number = uint8_t>
   void
-  add_subscriber(t_number p_num_subscribers,
+  add_subscriber(std::unsigned_integral auto p_num_subscribers,
                  std::function<async::typ::subscriber_t<t_event>()> p_factory);
 
   // Amount of events added
@@ -324,11 +323,11 @@ bool queue_t<t_event>::add_event(const t_event &p_event) {
 }
 
 template <cpt::event t_event>
-template <typename t_number>
+
 void queue_t<t_event>::add_subscriber(
-    t_number p_num_subscribers,
+    std::unsigned_integral auto p_num_subscribers,
     std::function<async::typ::subscriber_t<t_event>()> p_factory) {
-  for (t_number _i = 0; _i < p_num_subscribers; ++_i) {
+  for (decltype(p_num_subscribers) _i = 0; _i < p_num_subscribers; ++_i) {
     add_subscriber(p_factory());
   }
 }

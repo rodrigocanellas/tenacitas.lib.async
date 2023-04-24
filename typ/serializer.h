@@ -10,14 +10,16 @@
 #include <functional>
 #include <map>
 #include <optional>
+#include <ranges>
 
+#include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/typ/channel_id.h>
 #include <tenacitas.lib.async/typ/message.h>
 
 namespace tenacitas::lib::async::typ {
 
-template <typename t_event>
-using serializer = std::function<std::optional<typ::message>(const t_event &)>;
+template <cpt::event t_event, std::ranges::range t_message>
+using serializer = std::function<std::optional<t_message>(const t_event &)>;
 
 } // namespace tenacitas::lib::async::typ
 

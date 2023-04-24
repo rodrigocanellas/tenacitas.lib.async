@@ -3,12 +3,12 @@
 
 #include <thread>
 
+#include <tenacitas.lib.async/alg/dispatcher.h>
+#include <tenacitas.lib.async/alg/sleeping_loop.h>
+#include <tenacitas.lib.async/exp/temperature_sensors_simulator/evt/new_temperature.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/sensor_id.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/temperature.h>
-#include <tenacitas.lib.async/exp/temperature_sensors_simulator/evt/new_temperature.h>
-#include <tenacitas.lib.async/alg/dispatcher.h>
-
-#include <tenacitas.lib.async/alg/sleeping_loop.h>
+#include <tenacitas.lib.concepts/cpt/chrono_convertible.h>
 
 using namespace tenacitas::lib;
 
@@ -21,8 +21,8 @@ struct sensor {
   sensor &operator=(const sensor &) = delete;
   sensor &operator=(sensor &) = delete;
 
-  template <typename t_time>
-  sensor(async::alg::dispatcher::ptr p_dispatcher, t_time p_interval,
+  sensor(async::alg::dispatcher::ptr p_dispatcher,
+         concepts::cpt::convertible_to_ns auto p_interval,
          typ::sensor_id p_sensor_id, typ::temperature p_initial,
          typ::temperature p_increment)
       : m_dispatcher(p_dispatcher), m_sensor_id(p_sensor_id),

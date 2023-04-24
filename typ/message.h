@@ -6,6 +6,7 @@
 
 /// \author Rodrigo Canellas - rodrigo.canellas at gmail.com
 
+#include <concepts>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -15,7 +16,7 @@ namespace tenacitas::lib::async::typ {
 
 using message = std::vector<std::byte>;
 
-template <typename t_iterator>
+template <std::forward_iterator t_iterator>
 std::string msg2str(t_iterator p_begin, t_iterator p_end) {
   std::stringstream _stream;
   _stream << '{';
@@ -29,7 +30,7 @@ std::string msg2str(t_iterator p_begin, t_iterator p_end) {
   return _stream.str();
 }
 
-template <typename t_iterator>
+template <std::forward_iterator t_iterator>
 std::string msg2hexstr(t_iterator p_begin, t_iterator p_end) {
   std::stringstream _stream;
   _stream << "{ ";

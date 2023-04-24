@@ -17,19 +17,20 @@
 #include <vector>
 
 #include <tenacitas.lib.async/alg/dispatcher.h>
-#include <tenacitas.lib.log/alg/logger.h>
-#include <tenacitas.lib.program/alg/options.h>
-
 #include <tenacitas.lib.async/tst/dispatcher/cfg.h>
 #include <tenacitas.lib.async/tst/dispatcher/evt.h>
 #include <tenacitas.lib.async/tst/dispatcher/typ.h>
+#include <tenacitas.lib.async/typ/event_id.h>
+#include <tenacitas.lib.log/alg/logger.h>
+#include <tenacitas.lib.program/alg/options.h>
 
 using namespace tenacitas::lib;
 using namespace std::chrono_literals;
 
 namespace uix {
 
-bool start(const cfg::options &p_options, async::alg::dispatcher::ptr p_dispatcher,
+bool start(const cfg::options &p_options,
+           async::alg::dispatcher::ptr p_dispatcher,
            std::function<bool(async::alg::dispatcher::ptr,
                               const typ::generators_definitions &,
                               const typ::publishings_definitions &)>

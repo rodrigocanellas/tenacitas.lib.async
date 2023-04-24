@@ -22,7 +22,8 @@ constexpr char interval_option[]{"interval"};
 constexpr char interval_increment_option[]{"interval-increment"};
 constexpr char total_publishing_option[]{"total-publishing"};
 constexpr char amount_subscribers_option[]{"amount-subscribers"};
-constexpr char amount_subscribers_increment_option[]{"amount-subscribers-increment"};
+constexpr char amount_subscribers_increment_option[]{
+    "amount-subscribers-increment"};
 constexpr char sleep_option[]{"sleep"};
 constexpr char sleep_increment_option[]{"sleep-increment"};
 constexpr char sqlite_file[]{"sqlite-file"};
@@ -31,7 +32,8 @@ constexpr char sqlite_file[]{"sqlite-file"};
 
 void help(const char *p_pgm_name, std::ostream &p_stream) {
   p_stream
-      << "This tests tenacitas::lib::async::alg::dispatcher class. There will be "
+      << "This tests tenacitas::lib::async::alg::dispatcher class. There will "
+         "be "
          "generated as many combinations of the parameters provided.\n"
 
       << "Parameters:\n"
@@ -101,7 +103,7 @@ void help(const char *p_pgm_name, std::ostream &p_stream) {
          "200 500 } --amount-events-increment 50 --interval { 300 150 } "
          "--interval-increment 80 --total-publishing { 2 6 } "
          "--amount-subscribers { "
-         "3 12 } --amount-subscribers-increment 8 --sleep { 400, 250 } "
+         "3 12 } --amount-subscribers-increment 8 --sleep { 400 250 } "
          "--sleep-increment 100 --sqlite-file db.sqlite"
       << '\n';
 }
@@ -113,8 +115,9 @@ struct options {
                    {total_generator_option, amount_events_option,
                     amount_events_increment_option, interval_option,
                     interval_increment_option, total_publishing_option,
-                    amount_subscribers_option, amount_subscribers_increment_option,
-                    sleep_option, sleep_increment_option, sqlite_file});
+                    amount_subscribers_option,
+                    amount_subscribers_increment_option, sleep_option,
+                    sleep_increment_option, sqlite_file});
 
     m_total_generators = get_total_generator(_options);
 
@@ -161,7 +164,9 @@ struct options {
 
   typ::total_list get_total_publishings() const { return m_total_publishings; }
 
-  typ::amount_list get_amounts_subscribers() const { return m_amounts_subscribers; }
+  typ::amount_list get_amounts_subscribers() const {
+    return m_amounts_subscribers;
+  }
 
   typ::amount_increment get_amount_subscribers_increment() const {
     return m_amount_subscribers_increment;
@@ -267,7 +272,8 @@ struct options {
     }
   }
 
-  typ::total_list get_total_publishings(const program::alg::options &p_options) {
+  typ::total_list
+  get_total_publishings(const program::alg::options &p_options) {
     try {
       typ::total_list _total_publishings;
       {
@@ -287,7 +293,8 @@ struct options {
     }
   }
 
-  typ::amount_list get_amount_subscribers(const program::alg::options &p_options) {
+  typ::amount_list
+  get_amount_subscribers(const program::alg::options &p_options) {
     try {
       typ::amount_list _amounts_subscribers;
       {
@@ -343,7 +350,8 @@ struct options {
     }
   }
 
-  typ::time_increment get_sleep_increment(const program::alg::options &p_options) {
+  typ::time_increment
+  get_sleep_increment(const program::alg::options &p_options) {
     try {
       typ::time_increment _sleep_increment;
       std::optional<std::string> _maybe =

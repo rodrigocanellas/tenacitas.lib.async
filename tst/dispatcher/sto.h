@@ -6,11 +6,11 @@
 #include <sstream>
 #include <string>
 
-#include <tenacitas.lib.log/alg/logger.h>
-#include <tenacitas.lib.number/typ/id.h>
-
 #include <tenacitas.lib.async/tst/dispatcher/cfg.h>
 #include <tenacitas.lib.async/tst/dispatcher/typ.h>
+#include <tenacitas.lib.async/typ/event_id.h>
+#include <tenacitas.lib.log/alg/logger.h>
+#include <tenacitas.lib.number/typ/id.h>
 
 #include <sqlite3.h>
 
@@ -59,9 +59,9 @@ struct saver {
 
   ~saver() { close_db(); }
 
-  std::optional<typ::test_id> operator()(typ::summary &&p_summary,
-                                         typ::generators &&p_generators,
-                                         typ::publishings_results &&p_publishings) {
+  std::optional<typ::test_id>
+  operator()(typ::summary &&p_summary, typ::generators &&p_generators,
+             typ::publishings_results &&p_publishings) {
     try {
       open_db();
 
@@ -102,7 +102,8 @@ private:
         "\"typ::publishing_id\"	INTEGER NOT NULL,"
         "\"subscriber_id\"	INTEGER NOT NULL,"
         "\"amount\"	INTEGER NOT NULL,"
-        "FOREIGN KEY(\"test_id\",\"typ::publishing_id\") REFERENCES \"publishings\","
+        "FOREIGN KEY(\"test_id\",\"typ::publishing_id\") REFERENCES "
+        "\"publishings\","
         "PRIMARY KEY(\"test_id\",\"typ::publishing_id\",\"subscriber_id\")"
         ");"
         "CREATE TABLE IF NOT EXISTS \"publishings\" ("
@@ -235,10 +236,11 @@ private:
   }
 
   void save_subscribers(async::typ::queue_id p_publishing_id,
-                     const typ::subscribers_results &p_subscribers) {
+                        const typ::subscribers_results &p_subscribers) {
     for (const typ::subscribers_results::value_type &_value : p_subscribers) {
       std::stringstream _stream;
-      _stream << "insert into subscribers (test_id, typ::publishing_id, subscriber_id, "
+      _stream << "insert into subscribers (test_id, typ::publishing_id, "
+                 "subscriber_id, "
                  "amount) values ("
               << m_test_id << ", " << p_publishing_id << ", " << _value.first
               << ", " << _value.second << "); ";
@@ -263,7 +265,8 @@ private:
     for (const typ::publishings_results::value_type &_value : p_publishings) {
       async::typ::queue_id _publishing_id = _value.first;
       std::stringstream _stream;
-      _stream << "insert into publishings (test_id, typ::publishing_id, sleep) values ("
+      _stream << "insert into publishings (test_id, typ::publishing_id, sleep) "
+                 "values ("
               << m_test_id << ", " << _publishing_id << ", "
               << _value.second.sleep.count() << "); ";
 
@@ -272,7 +275,8 @@ private:
            SQLITE_OK) &&
           (_err == nullptr)) {
         TNCT_LOG_TST('\'', _stream.str(), "' OK");
-        const typ::subscribers_results &_subscribers = _value.second.subscribers;
+        const typ::subscribers_results &_subscribers =
+            _value.second.subscribers;
         save_subscribers(_publishing_id, _subscribers);
         continue;
       }

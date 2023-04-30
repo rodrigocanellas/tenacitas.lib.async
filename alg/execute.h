@@ -16,7 +16,7 @@
 #include <thread>
 #include <type_traits>
 
-#include <tenacitas.lib.concepts/cpt/chrono_convertible.h>
+#include <tenacitas.lib.calendar/cpt/chrono_convertible.h>
 #include <tenacitas.lib.log/alg/logger.h>
 
 /// \brief master namespace
@@ -63,7 +63,7 @@ inline std::conditional_t<
     // 'p_function' executes in less 'p_max_time', or empty otherwise
     std::optional<
         std::invoke_result_t<t_function, std::function<bool()>, t_params...>>>
-execute(concepts::cpt::convertible_to_ns auto p_max_time,
+execute(calendar::cpt::convertible_to_ns auto p_max_time,
         t_function &p_function, t_params &&...p_params) {
   std::mutex _mutex;
   std::condition_variable _cond;

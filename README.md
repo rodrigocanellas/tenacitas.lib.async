@@ -12,6 +12,8 @@ The corresponding repository must be cloned aside `tenacitas.lib.async`
 
 `tenacitas.lib.container`
 
+`tenacitas.lib.calendar`
+
 ### Dependencies for the tests
 
 `tenacitas.lib.program`

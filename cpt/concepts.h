@@ -13,35 +13,19 @@
 #include <iostream>
 
 #include <tenacitas.lib.async/typ/event_id.h>
-#include <tenacitas.lib.concepts/cpt/printable.h>
 
 namespace tenacitas::lib::async::cpt {
+
+template <class t>
+concept printable = requires(std::ostream &os, t p_t) {
+  os << p_t;
+};
 
 template <typename t>
 concept event = requires(t p_t) {
   { t::id } -> std::same_as<const typ::event_id &>;
-  concepts::cpt::printable<t>;
+  printable<t>;
   std::default_initializable<t>;
-};
-
-// template <typename t>
-// concept message_iterator = requires {
-//   std::forward_iterator<t>;
-
-//};
-
-// template <typename t>
-// concept message = requires {
-//   std::copyable<t>;
-//   std::movable<t>;
-//   typename t::const_iterator;
-
-//};
-
-template <typename t>
-concept dispatcher = requires(t p_t) {
-
-  {p_t.stop()};
 };
 
 } // namespace tenacitas::lib::async::cpt

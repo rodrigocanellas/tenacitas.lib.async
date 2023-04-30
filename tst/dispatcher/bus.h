@@ -17,7 +17,7 @@
 #include <tenacitas.lib.async/tst/dispatcher/evt.h>
 #include <tenacitas.lib.async/tst/dispatcher/typ.h>
 #include <tenacitas.lib.async/typ/event_id.h>
-#include <tenacitas.lib.concepts/cpt/chrono_convertible.h>
+#include <tenacitas.lib.calendar/cpt/chrono_convertible.h>
 #include <tenacitas.lib.log/alg/logger.h>
 
 using namespace tenacitas::lib;
@@ -159,7 +159,7 @@ struct pressure_tester {
 
 private:
   void add_publishing(uint16_t p_num_subscribers,
-                      concepts::cpt::convertible_to_ms auto p_sleep) {
+                      calendar::cpt::convertible_to_ms auto p_sleep) {
     auto _queue_id = m_dispatcher->add_queue<evt::pressure_generated>();
     m_summary.total_handled_expected += m_summary.total_sent_expected;
     TNCT_LOG_TST("p_num_subscribers = ", p_num_subscribers,

@@ -139,26 +139,6 @@ private:
   }
 };
 
-struct test005 {
-  static std::string desc() {
-    return "checks the tenacitas::lib::async::cpt::dispatcher";
-  }
-
-  bool operator()(const program::alg::options &) {
-
-    struct disp {
-      void stop() { TNCT_LOG_TST("stop"); }
-    };
-
-    disp _disp;
-    f(_disp);
-    return true;
-  }
-
-private:
-  void f(async::cpt::dispatcher auto &p_disp) { p_disp.stop(); }
-};
-
 int main(int argc, char **argv) {
   log::alg::set_debug_level();
   test::alg::tester _tester(argc, argv);
@@ -166,7 +146,6 @@ int main(int argc, char **argv) {
   run_test(_tester, test000);
   run_test(_tester, test002);
   run_test(_tester, test004);
-  run_test(_tester, test005);
 
   std::cout << "\n\n\n" << 1u - 100;
 }

@@ -16,7 +16,6 @@
 #include <tenacitas.lib.async/alg/sleeping_loop.h>
 #include <tenacitas.lib.async/tst/dispatcher/evt.h>
 #include <tenacitas.lib.async/tst/dispatcher/typ.h>
-#include <tenacitas.lib.async/typ/event_id.h>
 #include <tenacitas.lib.calendar/cpt/chrono_convertible.h>
 #include <tenacitas.lib.log/alg/logger.h>
 

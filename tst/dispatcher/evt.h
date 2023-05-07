@@ -8,7 +8,6 @@
 #include <tenacitas.lib.async/alg/dispatcher.h>
 #include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/tst/dispatcher/typ.h>
-#include <tenacitas.lib.async/typ/event_id.h>
 #include <tenacitas.lib.async/typ/queue_id.h>
 #include <tenacitas.lib.number/alg/format.h>
 #include <tenacitas.lib.number/typ/id.h>
@@ -61,14 +60,10 @@ struct pressure_generated {
     return *this;
   }
 
-  static constexpr async::typ::event_id id{1669763210785};
-
 private:
   number::typ::id m_generator;
   typ::pressure m_pressure{0};
 };
-
-// using pressure_ptr = std::shared_ptr<pressure_generated>;
 
 struct pressure_sent {
   pressure_sent() = default;
@@ -79,13 +74,10 @@ struct pressure_sent {
     p_out << "'sent (" << p_pressure_sent.m_generator << ")'";
     return p_out;
   }
-  static constexpr async::typ::event_id id{1669763249631};
 
 private:
   number::typ::id m_generator;
 };
-
-// using pressure_sent_ptr = std::shared_ptr<pressure_sent>;
 
 struct pressure_handled {
   pressure_handled() = default;
@@ -99,8 +91,6 @@ struct pressure_handled {
           << ")'";
     return p_out;
   }
-
-  static constexpr async::typ::event_id id{1669763266263};
 
   async::typ::queue_id queue;
 

@@ -24,7 +24,6 @@ struct remove_sensor {
   }
 
   typ::sensor_id sensor_id;
-  static constexpr async::typ::event_id id{1669763663113};
 };
 } // namespace temperature_sensors_simulator::evt
 

@@ -29,7 +29,6 @@ struct temperature {
     return p_out;
   }
   float value{0.0};
-  static constexpr async::typ::event_id id{1669763435650};
 };
 
 // event published when all temperatures are received by the subscribers
@@ -38,7 +37,6 @@ struct all_handled {
     p_out << "all_handled";
     return p_out;
   }
-  static constexpr async::typ::event_id id{1669763447923};
 };
 
 // simulates a temperature sensor generating 'temperature' events
@@ -53,8 +51,6 @@ struct temperature_sensor {
 
   // starts to publish 'temperature' events
   void start() { m_temperature_generator.start(); }
-
-  static constexpr async::typ::event_id id{1669763461862};
 
 private:
   // type for the asynchronous loop that will call the 'generator' method

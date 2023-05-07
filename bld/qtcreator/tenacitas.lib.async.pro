@@ -12,7 +12,6 @@ HEADERS = \
         $$BASE_DIR/tenacitas.lib.async/alg/sleeping_loop.h \
         $$BASE_DIR/tenacitas.lib.async/cpt/concepts.h \
         $$BASE_DIR/tenacitas.lib.async/internal/typ/queue.h \
-        $$BASE_DIR/tenacitas.lib.async/typ/event_id.h \
         $$BASE_DIR/tenacitas.lib.async/typ/priority.h \
         $$BASE_DIR/tenacitas.lib.async/typ/queue_id.h \
         $$BASE_DIR/tenacitas.lib.async/typ/subscriber.h \

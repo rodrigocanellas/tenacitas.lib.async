@@ -41,8 +41,6 @@ struct ev_0 {
   }
 
   uint16_t value{0};
-
-  static constexpr async::typ::event_id id{1669762943175};
 };
 
 struct ev_1 {
@@ -53,8 +51,6 @@ struct ev_1 {
     p_out << "ev_1 = " << p_ev.value;
     return p_out;
   }
-
-  static constexpr async::typ::event_id id{1669763295778};
 
   char value{0};
 };
@@ -378,7 +374,7 @@ int test_dispatcher::m_argc;
 char **test_dispatcher::m_argv;
 
 int main(int argc, char **argv) {
-  log::alg::set_info_level();
+  log::alg::set_trace_level();
   log::alg::set_max_file_name_lenght(20);
 
   program::alg::options _options;

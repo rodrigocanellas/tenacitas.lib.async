@@ -29,7 +29,6 @@ struct set_temperature {
 
   typ::sensor_id sensor_id;
   typ::temperature temperature;
-  static constexpr async::typ::event_id id{1669763677637};
 };
 
 } // namespace temperature_sensors_simulator::evt

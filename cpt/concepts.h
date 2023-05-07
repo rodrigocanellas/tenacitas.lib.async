@@ -12,8 +12,6 @@
 #include <functional>
 #include <iostream>
 
-#include <tenacitas.lib.async/typ/event_id.h>
-
 namespace tenacitas::lib::async::cpt {
 
 template <class t>
@@ -23,9 +21,10 @@ concept printable = requires(std::ostream &os, t p_t) {
 
 template <typename t>
 concept event = requires(t p_t) {
-  { t::id } -> std::same_as<const typ::event_id &>;
   printable<t>;
   std::default_initializable<t>;
+  std::copy_constructible<t>;
+  std::move_constructible<t>;
 };
 
 } // namespace tenacitas::lib::async::cpt

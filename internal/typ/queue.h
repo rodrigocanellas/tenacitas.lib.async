@@ -9,6 +9,7 @@
 #include <condition_variable>
 #include <memory>
 #include <mutex>
+#include <typeindex>
 
 #include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/typ/priority.h>
@@ -301,8 +302,8 @@ template <cpt::event t_event>
 bool queue_t<t_event>::add_event(const t_event &p_event) {
   try {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("event '", t_event::id, "', publishing ", m_id, ", queue ",
-                 m_queue.get_id(), " - adding event ", p_event);
+    TNCT_LOG_TRA("event '", typeid(t_event).name(), "', publishing ", m_id,
+                 ", queue ", m_queue.get_id(), " - adding event ", p_event);
 #endif
 
     m_queue.add(p_event);
@@ -316,7 +317,8 @@ bool queue_t<t_event>::add_event(const t_event &p_event) {
 
   } catch (std::exception &_ex) {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_ERR("error adding event'", t_event::id, "': '", _ex.what(), '\'');
+    TNCT_LOG_ERR("error adding event'", typeid(t_event).name(), "': '",
+                 _ex.what(), '\'');
 #endif
   }
   return false;
@@ -358,8 +360,8 @@ void queue_t<t_event>::add_subscriber(
     async::typ::subscriber_t<t_event> p_subscriber) {
   if (m_stopped) {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("event '", t_event::id, "', publishing ", m_id, ", queue ",
-                 m_queue.get_id(),
+    TNCT_LOG_TRA("event '", typeid(t_event).name(), "', publishing ", m_id,
+                 ", queue ", m_queue.get_id(),
                  " - not adding subscriber because m_stopped = ", m_stopped);
 #endif
     return;
@@ -378,8 +380,8 @@ void queue_t<t_event>::subscriber_loop(
 
   if (!p_subscriber) {
     std::stringstream _stream;
-    _stream << "invalid event subscriber for " << '(' << t_event::id << ','
-            << m_id << ',' << _queue_id << "," << _loop_id << ')';
+    _stream << "invalid event subscriber for " << '(' << typeid(t_event).name()
+            << ',' << m_id << ',' << _queue_id << "," << _loop_id << ')';
     const std::string _str{_stream.str()};
     TNCT_LOG_FAT(_str);
     throw std::runtime_error(_str);
@@ -389,7 +391,7 @@ void queue_t<t_event>::subscriber_loop(
 
   if (m_stopped) {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+    TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                  _subscriber_id, ',', _loop_id, ')',
                  " - leaving because it was already stopped");
 #endif
@@ -397,61 +399,62 @@ void queue_t<t_event>::subscriber_loop(
   }
 
 #ifdef TENACITAS_LOG
-  TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",", _subscriber_id,
-               ',', _loop_id, ')',
+  TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
+               _subscriber_id, ',', _loop_id, ')',
                " - entering loop, with m_stopped = ", m_stopped);
 #endif
   while (true) {
     {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+      TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                    _subscriber_id, ',', _loop_id, ')', " - locking");
 #endif
       std::unique_lock<std::mutex> _lock(m_mutex);
       m_cond.wait(_lock, [this, _subscriber_id, _loop_id, _queue_id]() -> bool {
 #ifdef TENACITAS_LOG
-        TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
-                     _subscriber_id, ',', _loop_id, ')',
+        TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id,
+                     ",", _subscriber_id, ',', _loop_id, ')',
                      " - entering condition, with m_stop = ", m_stopped,
                      ", and m_queue.empty()? ", m_queue.empty());
 #endif
         if (m_stopped) {
 #ifdef TENACITAS_LOG
-          TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
-                       _subscriber_id, ',', _loop_id, ')', " - stopped");
+          TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id,
+                       ",", _subscriber_id, ',', _loop_id, ')', " - stopped");
 #endif
           return true;
         }
         if (!m_queue.empty()) {
 #ifdef TENACITAS_LOG
-          TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
-                       _subscriber_id, ',', _loop_id, ')', " - there is data");
+          TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id,
+                       ",", _subscriber_id, ',', _loop_id, ')',
+                       " - there is data");
 #endif
           return true;
         }
         if (m_stopped) {
 #ifdef TENACITAS_LOG
-          TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
-                       _subscriber_id, ',', _loop_id, ')', " - stopped");
+          TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id,
+                       ",", _subscriber_id, ',', _loop_id, ')', " - stopped");
 #endif
           return true;
         }
 #ifdef TENACITAS_LOG
-        TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
-                     _subscriber_id, ',', _loop_id, ')', " - waiting");
+        TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id,
+                     ",", _subscriber_id, ',', _loop_id, ')', " - waiting");
 #endif
         return false;
       });
     }
 
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+    TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                  _subscriber_id, ',', _loop_id, ')', " - lock released");
 #endif
 
     if (m_stopped) {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+      TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                    _subscriber_id, ',', _loop_id, ')',
                    " - stopped due to explicit stop");
 #endif
@@ -465,7 +468,7 @@ void queue_t<t_event>::subscriber_loop(
     std::optional<t_event> _maybe{m_queue.get()};
     if (!_maybe.has_value()) {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+      TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                    _subscriber_id, ',', _loop_id, ')', " - no event in queue");
 #endif
       continue;
@@ -473,7 +476,7 @@ void queue_t<t_event>::subscriber_loop(
 
     if (m_stopped) {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+      TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                    _subscriber_id, ',', _loop_id, ')', " - stop");
 #endif
       break;
@@ -486,7 +489,7 @@ void queue_t<t_event>::subscriber_loop(
 
     if (m_stopped) {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+      TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                    _subscriber_id, ',', _loop_id, ')', " - stop");
 #endif
       break;
@@ -495,22 +498,23 @@ void queue_t<t_event>::subscriber_loop(
 #ifdef TENACITAS_LOG
     //      std::stringstream _stream;
     //      _stream << _event;
-    TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+    TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                  _subscriber_id, ',', _loop_id, ')', " - event ", _event,
                  " to be passed to a subscriber");
 #endif
     if (!p_subscriber) {
       std::stringstream _stream;
-      _stream << "invalid event subscriber for " << '(' << t_event::id << ','
-              << m_id << ',' << _queue_id << "," << _subscriber_id << ','
-              << _loop_id << ')' << " - event " << _event;
+      _stream << "invalid event subscriber for " << '('
+              << typeid(t_event).name() << ',' << m_id << ',' << _queue_id
+              << "," << _subscriber_id << ',' << _loop_id << ')' << " - event "
+              << _event;
       const std::string _str{_stream.str()};
       TNCT_LOG_FAT(_str);
       throw std::runtime_error(_str);
 
     } else {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+      TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                    _subscriber_id, ',', _loop_id, ')',
                    " - about to call subscriber");
 
@@ -519,14 +523,14 @@ void queue_t<t_event>::subscriber_loop(
     }
 
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",",
+    TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
                  _subscriber_id, ',', _loop_id, ')', " - event ", _event,
                  " handled");
 #endif
   }
 #ifdef TENACITAS_LOG
-  TNCT_LOG_TRA('(', t_event::id, ',', m_id, ',', _queue_id, ",", _subscriber_id,
-               ',', _loop_id, ") - leaving");
+  TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
+               _subscriber_id, ',', _loop_id, ") - leaving");
 #endif
 }
 

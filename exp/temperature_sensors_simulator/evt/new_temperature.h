@@ -6,9 +6,6 @@
 
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/sensor_id.h>
 #include <tenacitas.lib.async/exp/temperature_sensors_simulator/typ/temperature.h>
-#include <tenacitas.lib.async/typ/event_id.h>
-
-using namespace tenacitas::lib;
 
 namespace temperature_sensors_simulator::evt {
 
@@ -32,7 +29,6 @@ struct new_temperature {
 
   typ::sensor_id sensor_id;
   typ::temperature temperature;
-  static constexpr async::typ::event_id id{1669763646194};
 };
 
 } // namespace temperature_sensors_simulator::evt

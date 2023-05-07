@@ -23,12 +23,12 @@
 #include <mutex>
 #include <optional>
 #include <thread>
+#include <typeindex>
 #include <utility>
 #include <vector>
 
 #include <tenacitas.lib.async/cpt/concepts.h>
 #include <tenacitas.lib.async/internal/typ/queue.h>
-#include <tenacitas.lib.async/typ/event_id.h>
 #include <tenacitas.lib.async/typ/priority.h>
 #include <tenacitas.lib.async/typ/queue_id.h>
 #include <tenacitas.lib.async/typ/subscriber.h>
@@ -72,8 +72,7 @@ interesting event in the application. It can be, for example, a incoming message
 from a network connection, a user menu choice or a temperature coming from a
 sensor.
 
-Every \p event class must define a <tt>operator <<(std::ostream&)</tt>, and a
-<tt>static constexpr typ::event_id id</tt> public attribute.
+Every \p event class must define a <tt>operator <<(std::ostream&)</tt>.
 
 A \p tenacitas::lib::async::typ::subscriber_t is a function class that will
 handle a (shared) pointer to a \p t_event object.
@@ -135,14 +134,12 @@ struct dispatcher {
   ///
   /// \return a \p typ::queue_id, identifying the queue
   template <cpt::event t_event>
-  typ::queue_id
-  add_queue(typ::priority p_priority = typ::priority ::medium);
+  typ::queue_id add_queue(typ::priority p_priority = typ::priority ::medium);
 
   /// \brief Adds a subscriber to a new queue
   template <cpt::event t_event>
-  typ::queue_id
-  subscribe(typ::subscriber_t<t_event> p_subscriber,
-            typ::priority p_priority = typ::priority ::medium);
+  typ::queue_id subscribe(typ::subscriber_t<t_event> p_subscriber,
+                          typ::priority p_priority = typ::priority ::medium);
 
   /// \brief Adds a subscriber to an existing queue
   ///
@@ -261,7 +258,8 @@ private:
   using queues = std::list<internal::typ::queue::ptr>;
 
   // Event runtime id, and the list of queues associated to the event
-  using events = std::map<typ::event_id, queues>;
+  using events = std::map<std::type_index, queues>;
+  // std::type_index(typeid(int))
 
 private:
   template <cpt::event t_event>
@@ -312,7 +310,8 @@ typ::queue_id dispatcher::add_queue(typ::priority p_priority) {
   typ::queue_id _queue_id{_queues.back()->get_id()};
 
 #ifdef TENACITAS_LOG
-  TNCT_LOG_TRA("##### event '", t_event::id, "' - adding queue ", _queue_id);
+  TNCT_LOG_TRA("##### event '", typeid(t_event).name(), "' - adding queue ",
+               _queue_id);
 #endif
 
   sort(_queues);
@@ -330,7 +329,7 @@ void dispatcher::subscribe(const typ::queue_id &p_queue_id,
 
     if ((*_queue_ite)->get_id() != p_queue_id) {
       std::stringstream _stream;
-      _stream << "event '" << t_event::id << "' - queue id should be"
+      _stream << "event '" << typeid(t_event).name() << "' - queue id should be"
               << p_queue_id << ", but it is " << (*_queue_ite)->get_id();
       const std::string _str{_stream.str()};
       TNCT_LOG_FAT(_str);
@@ -350,8 +349,8 @@ void dispatcher::subscribe(
   auto _queue_ite = find(_queues, p_queue_id);
   if (_queue_ite != _queues.end()) {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("event '", t_event::id, "' - adding ", p_num_workers,
-                 " subscribers to queue ", p_queue_id);
+    TNCT_LOG_TRA("event '", typeid(t_event).name(), "' - adding ",
+                 p_num_workers, " subscribers to queue ", p_queue_id);
 #endif
     convert<t_event>(_queue_ite)->add_subscriber(p_num_workers, p_factory);
   }
@@ -370,9 +369,8 @@ inline dispatcher::~dispatcher() {
 }
 
 template <cpt::event t_event>
-typ::queue_id
-dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
-                      typ::priority p_priority) {
+typ::queue_id dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
+                                    typ::priority p_priority) {
   typ::queue_id _id = add_queue<t_event>(p_priority);
   subscribe(_id, p_subscriber);
   return _id;
@@ -405,8 +403,8 @@ bool dispatcher::publish_to_queue(typ::queue_id p_queue_id,
 
       if ((*_ite)->get_id() == p_queue_id) {
 #ifdef TENACITAS_LOG
-        TNCT_LOG_TRA("event '", t_event::id, "' - sending event to queue ",
-                     (*_ite)->get_id());
+        TNCT_LOG_TRA("event '", typeid(t_event).name(),
+                     "' - sending event to queue ", (*_ite)->get_id());
 #endif
         convert<t_event>(_ite)->add_event(p_event);
       }
@@ -499,13 +497,13 @@ bool dispatcher::internal_publish(const t_event &p_event) {
 
   queues &_queues = get_queues<t_event>();
 #ifdef TENACITAS_LOG
-  TNCT_LOG_TRA("got queues for ", t_event::id);
+  TNCT_LOG_TRA("got queues for ", typeid(t_event).name());
 #endif
 
   for (queues::iterator _ite = _queues.begin(); _ite != _queues.end(); ++_ite) {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("event '", t_event::id, "' - sending event to queue ",
-                 (*_ite)->get_id());
+    TNCT_LOG_TRA("event '", typeid(t_event).name(),
+                 "' - sending event to queue ", (*_ite)->get_id());
 #endif
     convert<t_event>(_ite)->add_event(p_event);
   }
@@ -537,7 +535,8 @@ inline void dispatcher::sort(queues &p_queues) {
 
 template <cpt::event t_event>
 inline constexpr dispatcher::queues &dispatcher::get_queues() {
-  return m_events[t_event::id];
+  //  return m_events[t_event::id];
+  return m_events[std::type_index(typeid(t_event))];
 }
 
 } // namespace tenacitas::lib::async::alg

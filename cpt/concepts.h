@@ -14,14 +14,13 @@
 
 namespace tenacitas::lib::async::cpt {
 
-template <class t>
-concept printable = requires(std::ostream &os, t p_t) {
-  os << p_t;
-};
+// template <class t>
+// concept printable = requires(std::ostream &os, t p_t) {
+//   os << p_t;
+// };
 
 template <typename t>
 concept event = requires(t p_t) {
-  printable<t>;
   std::default_initializable<t>;
   std::copy_constructible<t>;
   std::move_constructible<t>;

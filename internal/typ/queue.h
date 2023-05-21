@@ -303,7 +303,7 @@ bool queue_t<t_event>::add_event(const t_event &p_event) {
   try {
 #ifdef TENACITAS_LOG
     TNCT_LOG_TRA("event '", typeid(t_event).name(), "', publishing ", m_id,
-                 ", queue ", m_queue.get_id(), " - adding event ", p_event);
+                 ", queue ", m_queue.get_id(), " - adding event ");
 #endif
 
     m_queue.add(p_event);
@@ -484,7 +484,7 @@ void queue_t<t_event>::subscriber_loop(
 
     t_event _event{std::move(*_maybe)};
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("got event ", _event, " from the queue");
+    TNCT_LOG_TRA("got event ", typeid(t_event).name(), " from the queue");
 #endif
 
     if (m_stopped) {
@@ -506,8 +506,7 @@ void queue_t<t_event>::subscriber_loop(
       std::stringstream _stream;
       _stream << "invalid event subscriber for " << '('
               << typeid(t_event).name() << ',' << m_id << ',' << _queue_id
-              << "," << _subscriber_id << ',' << _loop_id << ')' << " - event "
-              << _event;
+              << "," << _subscriber_id << ',' << _loop_id << ')';
       const std::string _str{_stream.str()};
       TNCT_LOG_FAT(_str);
       throw std::runtime_error(_str);
@@ -524,8 +523,7 @@ void queue_t<t_event>::subscriber_loop(
 
 #ifdef TENACITAS_LOG
     TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
-                 _subscriber_id, ',', _loop_id, ')', " - event ", _event,
-                 " handled");
+                 _subscriber_id, ',', _loop_id, ')', " - event handled");
 #endif
   }
 #ifdef TENACITAS_LOG
@@ -556,16 +554,15 @@ void queue_t<t_event>::empty_queue(
 
     if (this->m_stopped) {
 #ifdef TENACITAS_LOG
-      TNCT_LOG_TRA("event '", typeid(t_event), "', publishing ", m_id,
+      TNCT_LOG_TRA("event '", typeid(t_event).name(), "', publishing ", m_id,
                    ", loop ", p_loop_id, " - stop");
 #endif
       break;
     }
 
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("event '", typeid(t_event), "', publishing ", m_id, ", loop ",
-                 p_loop_id, " - event ", _event,
-                 " to be passed to a subscriber");
+    TNCT_LOG_TRA("event '", typeid(t_event).name(), "', publishing ", m_id,
+                 ", loop ", p_loop_id, " - event to be passed to a subscriber");
 #endif
     p_subscriber(std::move(_event));
   }

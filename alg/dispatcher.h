@@ -379,11 +379,12 @@ typ::queue_id dispatcher::subscribe(typ::subscriber_t<t_event> p_subscriber,
 template <cpt::event t_event> bool dispatcher::publish(const t_event &p_event) {
   try {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("queue ", p_event);
+    TNCT_LOG_TRA("queue ", typeid(t_event).name());
 #endif
     return internal_publish<t_event>(p_event);
   } catch (std::exception &_ex) {
-    TNCT_LOG_ERR("error queue ", p_event, ": '", _ex.what(), '\'');
+    TNCT_LOG_ERR("error queue ", typeid(t_event).name(), ": '", _ex.what(),
+                 '\'');
     return false;
   }
 }
@@ -393,7 +394,7 @@ bool dispatcher::publish_to_queue(typ::queue_id p_queue_id,
                                   const t_event &p_event) {
   try {
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("queue ", p_event, ", in queue ", p_queue_id);
+    TNCT_LOG_TRA("queue ", typeid(t_event).name(), ", in queue ", p_queue_id);
 #endif
 
     queues &_queues = get_queues<t_event>();
@@ -411,8 +412,8 @@ bool dispatcher::publish_to_queue(typ::queue_id p_queue_id,
     }
 
   } catch (std::exception &_ex) {
-    TNCT_LOG_ERR("error queue ", p_event, ", in queue ", p_queue_id, ": '",
-                 _ex.what(), '\'');
+    TNCT_LOG_ERR("error queue ", typeid(t_event).name(), ", in queue ",
+                 p_queue_id, ": '", _ex.what(), '\'');
     return false;
   }
   return true;
@@ -426,7 +427,7 @@ bool dispatcher::publish(t_params &&...p_params) {
 #endif
     t_event _event{std::forward<t_params>(p_params)...};
 #ifdef TENACITAS_LOG
-    TNCT_LOG_TRA("event to publish: ", _event);
+    TNCT_LOG_TRA("event to publish: ", typeid(t_event).name());
 #endif
     return internal_publish<t_event>(_event);
   } catch (std::exception &_ex) {
@@ -492,7 +493,7 @@ internal::typ::queue_t<t_event> *dispatcher::convert(queues::iterator p_ite) {
 template <cpt::event t_event>
 bool dispatcher::internal_publish(const t_event &p_event) {
 #ifdef TENACITAS_LOG
-  TNCT_LOG_TRA("internal queue ", p_event);
+  TNCT_LOG_TRA("internal queue ", typeid(t_event).name());
 #endif
 
   queues &_queues = get_queues<t_event>();

@@ -499,8 +499,8 @@ void queue_t<t_event>::subscriber_loop(
     //      std::stringstream _stream;
     //      _stream << _event;
     TNCT_LOG_TRA('(', typeid(t_event).name(), ',', m_id, ',', _queue_id, ",",
-                 _subscriber_id, ',', _loop_id, ')', " - event ", _event,
-                 " to be passed to a subscriber");
+                 _subscriber_id, ',', _loop_id, ')', " - event ",
+                 typeid(t_event).name(), " to be passed to a subscriber");
 #endif
     if (!p_subscriber) {
       std::stringstream _stream;

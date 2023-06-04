@@ -84,7 +84,8 @@ execute(calendar::cpt::convertible_to_ns auto p_max_time,
 
     std::unique_lock<std::mutex> _lock{_mutex};
     if (_cond.wait_for(_lock, _ns) != std::cv_status::timeout) {
-      _th.join();
+      //      _th.join();
+      _th.detach();
       return true;
     }
     _timeout = true;
@@ -101,7 +102,8 @@ execute(calendar::cpt::convertible_to_ns auto p_max_time,
 
     std::unique_lock<std::mutex> _lock{_mutex};
     if (_cond.wait_for(_lock, _ns) != std::cv_status::timeout) {
-      _th.join();
+      //      _th.join();
+      _th.detach();
       return {std::move(_ret)};
     }
     _timeout = true;
